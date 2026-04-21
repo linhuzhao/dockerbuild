@@ -1,0 +1,25 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest  # 使用 GitHub 免费服务器
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and save Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          tags: my-image:latest
+          outputs: type=docker,dest=my-image.tar
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: my-image.tar
